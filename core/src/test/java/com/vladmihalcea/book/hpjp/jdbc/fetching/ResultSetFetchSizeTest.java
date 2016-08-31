@@ -52,8 +52,6 @@ public class ResultSetFetchSizeTest extends DataSourceProviderIntegrationTest {
     };
 
     private static DataSourceProvider[] dataSourceProviders = new DataSourceProvider[]{
-            new OracleDataSourceProvider(),
-            new SQLServerDataSourceProvider(),
             new PostgreSQLDataSourceProvider(),
             new MySQLDataSourceProvider()
     };

@@ -1,6 +1,5 @@
 package com.vladmihalcea.book.hpjp.util;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -8,7 +7,6 @@ import net.sourceforge.jtds.jdbcx.JtdsDataSource;
 import net.ttddyy.dsproxy.ExecutionInfo;
 import net.ttddyy.dsproxy.QueryInfo;
 import net.ttddyy.dsproxy.listener.DefaultQueryLogEntryCreator;
-import oracle.jdbc.pool.OracleDataSource;
 import org.hibernate.Interceptor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -309,67 +307,6 @@ public abstract class AbstractTest {
         }
     }
 
-    public static class OracleDataSourceProvider implements DataSourceProvider {
-        @Override
-        public String hibernateDialect() {
-            return "org.hibernate.dialect.Oracle10gDialect";
-        }
-
-        @Override
-        public DataSource dataSource() {
-            try {
-                OracleDataSource dataSource = new OracleDataSource();
-                dataSource.setDatabaseName("high_performance_java_persistence");
-                dataSource.setURL("jdbc:oracle:thin:@localhost:1521/xe");
-                dataSource.setUser("oracle");
-                dataSource.setPassword("admin");
-                return dataSource;
-            } catch (SQLException e) {
-                throw new IllegalStateException(e);
-            }
-        }
-
-        @Override
-        public Class<? extends DataSource> dataSourceClassName() {
-            return OracleDataSource.class;
-        }
-
-        @Override
-        public Properties dataSourceProperties() {
-            Properties properties = new Properties();
-            properties.setProperty("databaseName", "high_performance_java_persistence");
-            properties.setProperty("URL", url());
-            properties.setProperty("user", username());
-            properties.setProperty("password", password());
-            return properties;
-        }
-
-        @Override
-        public String url() {
-            return "jdbc:oracle:thin:@localhost:1521/xe";
-        }
-
-        @Override
-        public String username() {
-            return "oracle";
-        }
-
-        @Override
-        public String password() {
-            return "admin";
-        }
-
-        @Override
-        public List<IdentifierStrategy> identifierStrategies() {
-            return Arrays.asList(IdentifierStrategy.SEQUENCE);
-        }
-
-        @Override
-        public Database database() {
-            return Database.ORACLE;
-        }
-    }
-
     public static class MySQLDataSourceProvider implements DataSourceProvider {
 
         private boolean rewriteBatchedStatements = true;
@@ -464,57 +401,6 @@ public abstract class AbstractTest {
                     ", cachePrepStmts=" + cachePrepStmts +
                     ", useServerPrepStmts=" + useServerPrepStmts +
                     '}';
-        }
-    }
-
-    public static class SQLServerDataSourceProvider implements DataSourceProvider {
-        @Override
-        public String hibernateDialect() {
-            return "org.hibernate.dialect.SQLServer2012Dialect";
-        }
-
-        @Override
-        public DataSource dataSource() {
-            SQLServerDataSource dataSource = new SQLServerDataSource();
-            dataSource.setURL("jdbc:sqlserver://localhost;instance=SQLEXPRESS;databaseName=high_performance_java_persistence;user=sa;password=adm1n");
-            return dataSource;
-        }
-
-        @Override
-        public Class<? extends DataSource> dataSourceClassName() {
-            return SQLServerDataSource.class;
-        }
-
-        @Override
-        public Properties dataSourceProperties() {
-            Properties properties = new Properties();
-            properties.setProperty("URL", url());
-            return properties;
-        }
-
-        @Override
-        public String url() {
-            return "jdbc:sqlserver://localhost;instance=SQLEXPRESS;databaseName=high_performance_java_persistence;user=sa;password=adm1n";
-        }
-
-        @Override
-        public String username() {
-            return null;
-        }
-
-        @Override
-        public String password() {
-            return null;
-        }
-
-        @Override
-        public List<IdentifierStrategy> identifierStrategies() {
-            return Arrays.asList(IdentifierStrategy.IDENTITY, IdentifierStrategy.SEQUENCE);
-        }
-
-        @Override
-        public Database database() {
-            return Database.SQLSERVER;
         }
     }
 

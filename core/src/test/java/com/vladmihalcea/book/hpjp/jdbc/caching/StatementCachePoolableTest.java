@@ -3,7 +3,6 @@ package com.vladmihalcea.book.hpjp.jdbc.caching;
 import com.vladmihalcea.book.hpjp.util.DataSourceProviderIntegrationTest;
 import com.vladmihalcea.book.hpjp.util.providers.BlogEntityProvider;
 import net.sourceforge.jtds.jdbcx.JtdsDataSource;
-import oracle.jdbc.pool.OracleDataSource;
 import org.junit.Test;
 import org.junit.runners.Parameterized;
 import org.postgresql.ds.PGSimpleDataSource;
@@ -25,37 +24,6 @@ import static org.junit.Assert.fail;
  * @author Vlad Mihalcea
  */
 public class StatementCachePoolableTest extends DataSourceProviderIntegrationTest {
-
-    public static class CachingOracleDataSourceProvider extends OracleDataSourceProvider {
-        private final int cacheSize;
-
-        CachingOracleDataSourceProvider(int cacheSize) {
-            this.cacheSize = cacheSize;
-        }
-
-        @Override
-        public DataSource dataSource() {
-            OracleDataSource dataSource = (OracleDataSource) super.dataSource();
-            try {
-                Properties connectionProperties = dataSource.getConnectionProperties();
-                if(connectionProperties == null) {
-                    connectionProperties = new Properties();
-                }
-                connectionProperties.put("oracle.jdbc.implicitStatementCacheSize", Integer.toString(cacheSize));
-                dataSource.setConnectionProperties(connectionProperties);
-            } catch (SQLException e) {
-                fail(e.getMessage());
-            }
-            return dataSource;
-        }
-
-        @Override
-        public String toString() {
-            return "CachingOracleDataSourceProvider{" +
-                    "cacheSize=" + cacheSize +
-                    '}';
-        }
-    }
 
     public static class CachingJTDSDataSourceProvider extends JTDSDataSourceProvider {
         private final int cacheSize;
@@ -114,9 +82,6 @@ public class StatementCachePoolableTest extends DataSourceProviderIntegrationTes
     @Parameterized.Parameters
     public static Collection<DataSourceProvider[]> rdbmsDataSourceProvider() {
         List<DataSourceProvider[]> providers = new ArrayList<>();
-        providers.add(new DataSourceProvider[]{
-                new CachingOracleDataSourceProvider(1)
-        });
         providers.add(new DataSourceProvider[]{
                 new CachingJTDSDataSourceProvider(1)
         });

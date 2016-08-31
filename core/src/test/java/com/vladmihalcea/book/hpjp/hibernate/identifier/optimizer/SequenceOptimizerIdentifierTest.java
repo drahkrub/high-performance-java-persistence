@@ -42,7 +42,6 @@ public class SequenceOptimizerIdentifierTest extends AbstractTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> dataProvider() {
-        OracleDataSourceProvider oracleDataSourceProvider = new OracleDataSourceProvider();
         PostgreSQLDataSourceProvider postgreSQLDataSourceProvider = new PostgreSQLDataSourceProvider();
 
         Sequence1PostEntityProvider sequence1PostEntityProvider = new Sequence1PostEntityProvider();
